@@ -1,0 +1,16 @@
+services:
+  chainlit:
+    container_name: chatbot-programming
+    build: .
+    env_file:
+      - .env 
+    command: chainlit run main.py --port 8080 --host 0.0.0.0
+    working_dir: /app/src
+    volumes:
+      - ./src:/app/src
+      - ./requirements.txt:/app/requirements.txt
+    ports:
+      - "8000:8000"  
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

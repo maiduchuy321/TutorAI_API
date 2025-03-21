@@ -1,0 +1,9 @@
+### FPT KEY Configuration
+FPT_API_URL = "https://api.fpt.ai/nlp/llm/api/v1/"
+FPT_API_KEY = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+
+### LANGFUSE KEY Configuration
+"LANGFUSE_SECRET_KEY" = 'sk-lf-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+"LANGFUSE_PUBLIC_KEY" = 'pk-lf-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+"LANGFUSE_HOST" = "http://localhost:3000" #Replace your host
