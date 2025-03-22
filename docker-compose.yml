@@ -1,16 +1,43 @@
+version: '3.8'
+
 services:
-  chainlit:
-    container_name: chatbot-programming
-    build: .
-    env_file:
-      - .env 
-    command: chainlit run main.py --port 8080 --host 0.0.0.0
-    working_dir: /app/src
-    volumes:
-      - ./src:/app/src
-      - ./requirements.txt:/app/requirements.txt
-    ports:
-      - "8000:8000"  
+  postgres:
+    image: postgres:14
+    container_name: aitutor-postgres
     environment:
-      - PYTHONUNBUFFERED=1
-    restart: unless-stopped
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aitutor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aitutor-network
+
+  backend:
+    build: ./backend
+    container_name: aitutor-backend
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/aitutor
+      - api_key_fpt=${api_key_fpt}
+      - api_url_fpt=${api_url_fpt}
+      - SECRET_KEY=${SECRET_KEY}
+      - DAILY_REQUEST_LIMIT=100
+      - TOKEN_QUOTA_PER_USER=10000
+    ports:
+      - "8080:8080"
+    networks:
+      - aitutor-network
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
+
+networks:
+  aitutor-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
